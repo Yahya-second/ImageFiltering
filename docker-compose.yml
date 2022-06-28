@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  web:
+    build: 
+      context: ./udacity-c3-frontend
+      dockerfile: Dockerfile
+      network: host
+    ports:
+      - "8100:8100"
+  feed-api:
+    build: 
+      context: ./udacity-c3-restapi-feed
+      dockerfile: Dockerfile
+      network: host
+    env_file:
+      - .env
+  users-api:
+    build:
+      context: ./udacity-c3-restapi-users
+      dockerfile: Dockerfile
+      network: host
+    env_file:
+      - .env
+  reverse-proxy:
+    build:
+      context: ./udacity-c3-reverse-proxy
+      dockerfile: Dockerfile
+      network: host
+    ports:
+      - "8080:80"
+    depends_on:
+      - feed-api
+      - users-api   
